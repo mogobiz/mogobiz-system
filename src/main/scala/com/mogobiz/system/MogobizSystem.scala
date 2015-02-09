@@ -8,7 +8,6 @@ import spray.http._
 import spray.routing._
 import spray.routing.directives.LogEntry
 import spray.util.LoggingContext
-
 import scala.util.control.NonFatal
 
 /**
@@ -18,13 +17,13 @@ import scala.util.control.NonFatal
 trait MogobizSystem {
   implicit def system: ActorSystem
 
+//  def breaker: CircuitBreaker
+
   def showRequest(request: HttpRequest): HttpResponsePart ⇒ Option[LogEntry] = {
     case HttpResponse(s, _, _, _) ⇒ Some(LogEntry(s"${s.intValue}: ${request.uri}", InfoLevel))
     case ChunkedResponseStart(HttpResponse(OK, _, _, _)) ⇒ Some(LogEntry(" 200 (chunked): ${request.uri}", InfoLevel))
     case _ ⇒ None
   }
-
-
 }
 
 /**
@@ -37,13 +36,15 @@ trait BootedMogobizSystem extends MogobizSystem {
    */
   implicit lazy val system = ActorSystem("mogobiz")
 
+//  lazy val breaker = new CircuitBreaker(system.scheduler,
+//    maxFailures = 5,
+//    callTimeout = 10.seconds,
+//    resetTimeout = 1.minute)
   /**
    * Ensure that the constructed ActorSystem is shut down when the JVM shuts down
    */
   sys.addShutdownHook(system.shutdown())
 }
-
-
 
 
 /**
