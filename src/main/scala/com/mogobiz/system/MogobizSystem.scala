@@ -4,8 +4,7 @@
 
 package com.mogobiz.system
 
-
-import akka.actor.{ActorLogging, Actor, ActorSystem}
+import akka.actor.{ ActorLogging, Actor, ActorSystem }
 import akka.event.Logging._
 import spray.http.StatusCodes._
 import spray.http._
@@ -21,7 +20,7 @@ import scala.util.control.NonFatal
 trait MogobizSystem {
   implicit def system: ActorSystem
 
-//  def breaker: CircuitBreaker
+  //  def breaker: CircuitBreaker
 
   def showRequest(request: HttpRequest): HttpResponsePart ⇒ Option[LogEntry] = {
     case HttpResponse(s, _, _, _) ⇒ Some(LogEntry(s"${s.intValue}: ${request.uri}", InfoLevel))
@@ -40,16 +39,15 @@ trait BootedMogobizSystem extends MogobizSystem {
    */
   implicit lazy val system = ActorSystem("mogobiz")
 
-//  lazy val breaker = new CircuitBreaker(system.scheduler,
-//    maxFailures = 5,
-//    callTimeout = 10.seconds,
-//    resetTimeout = 1.minute)
+  //  lazy val breaker = new CircuitBreaker(system.scheduler,
+  //    maxFailures = 5,
+  //    callTimeout = 10.seconds,
+  //    resetTimeout = 1.minute)
   /**
    * Ensure that the constructed ActorSystem is shut down when the JVM shuts down
    */
   sys.addShutdownHook(system.shutdown())
 }
-
 
 /**
  * @param responseStatus
@@ -71,7 +69,7 @@ class RoutedHttpService(route: Route) extends Actor with HttpService with ActorL
     case NonFatal(ErrorResponseException(statusCode, entity)) => ctx =>
       ctx.complete(statusCode, entity)
 
-    case NonFatal(e) => ctx => {
+      case NonFatal(e) => ctx => {
       log.error(e, InternalServerError.defaultMessage)
       ctx.complete(InternalServerError)
     }
