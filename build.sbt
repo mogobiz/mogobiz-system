@@ -1,3 +1,3 @@
-name := "mogobiz-actors"
+name := "mogobiz-system"
 
 scalariformSettings
