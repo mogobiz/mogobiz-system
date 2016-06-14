@@ -5,6 +5,7 @@
 package com.mogobiz.system
 
 import akka.actor.ActorSystem
+import akka.stream.{ ActorMaterializer, Materializer }
 
 /**
  * Core is type containing the ``system: ActorSystem`` member. This enables us to use it in our
@@ -12,6 +13,7 @@ import akka.actor.ActorSystem
  */
 trait MogobizSystem {
   implicit def system: ActorSystem
+  implicit def materializer: Materializer
 
   //  def breaker: CircuitBreaker
 }
@@ -25,6 +27,7 @@ trait BootedMogobizSystem extends MogobizSystem {
    * Construct the ActorSystem we will use in our application
    */
   implicit lazy val system = ActorSystem("mogobiz")
+  implicit lazy val materializer = ActorMaterializer()
 
   //  lazy val breaker = new CircuitBreaker(system.scheduler,
   //    maxFailures = 5,
