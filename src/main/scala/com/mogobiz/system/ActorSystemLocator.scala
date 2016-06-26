@@ -7,9 +7,8 @@ package com.mogobiz.system
 import akka.actor.ActorSystem
 
 /**
- * provide the akka system actor in
- */
-
+  * provide the akka system actor in
+  */
 object ActorSystemLocator {
   //  def instance(actor: ActorRef) = new ActorSystemLocator(actor)
   private var instance: ActorSystem = null
