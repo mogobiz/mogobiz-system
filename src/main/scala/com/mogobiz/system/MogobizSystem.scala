@@ -22,6 +22,13 @@ trait MogobizSystem {
 
   //  def breaker: CircuitBreaker
 
+  def debugRequest(request: HttpRequest): LogEntry = {
+      val s = request.headers.map { header =>
+        "Header : " + header.name + " =>" + header.value
+      }.mkString("\n") + "ENTITY\n" + request.entity.asString
+    LogEntry(s, InfoLevel)
+  }
+
   def showRequest(request: HttpRequest): HttpResponsePart ⇒ Option[LogEntry] = {
     case HttpResponse(s, _, _, _)                        ⇒ Some(LogEntry(s"${s.intValue}: ${request.uri}", InfoLevel))
     case ChunkedResponseStart(HttpResponse(OK, _, _, _)) ⇒ Some(LogEntry(" 200 (chunked): ${request.uri}", InfoLevel))
