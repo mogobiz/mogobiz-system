@@ -4,13 +4,14 @@
 
 package com.mogobiz.system
 
-import akka.actor.{ActorLogging, Actor, ActorSystem}
+import akka.actor.{Actor, ActorLogging, ActorSystem}
 import akka.event.Logging._
 import spray.http.StatusCodes._
 import spray.http._
 import spray.routing._
 import spray.routing.directives.LogEntry
 import spray.util.LoggingContext
+
 import scala.util.control.NonFatal
 
 /**
@@ -23,9 +24,9 @@ trait MogobizSystem {
   //  def breaker: CircuitBreaker
 
   def debugRequest(request: HttpRequest): LogEntry = {
-      val s = request.headers.map { header =>
-        "Header : " + header.name + " =>" + header.value
-      }.mkString("\n") + "ENTITY\n" + request.entity.asString
+    val s = request.headers.map { header =>
+      "Header : " + header.name + " =>" + header.value
+    }.mkString("\n") + "ENTITY\n" + request.entity.asString
     LogEntry(s, InfoLevel)
   }
 
